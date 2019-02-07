@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Capstone.VendingMachineFolder;
 
-namespace DeliveryApp.CLIs
+namespace Capstone.CLIs
 {
     public abstract class CLI
     {
@@ -118,7 +119,7 @@ namespace DeliveryApp.CLIs
         /// <summary>
         /// This is the method called to run a menu.
         /// </summary>
-        public abstract void Run();
+        public abstract void Run(VendingMachine vm);
 
     }
 }

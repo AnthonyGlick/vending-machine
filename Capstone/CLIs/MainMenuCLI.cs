@@ -1,36 +1,37 @@
-﻿using DeliveryApp.CLIs;
+﻿using Capstone.CLIs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Capstone.VendingMachineFolder;
+using System.IO;
 
-namespace Capstone
+
+namespace Capstone.CLIs
 {
     public class MainMenuCLI : CLI
     {
-        public override void Run()
+        public override void Run(VendingMachine vm)
         {
             while (true)
             {
-
-
                 Console.Clear();
                 Console.WriteLine("Please select an option: ");
                 Console.WriteLine("1) Display Inventory");
                 Console.WriteLine("2) Purchase");
                 Console.WriteLine("Q) Quit");
-                string mainChoice = GetString("> Pick one: ");
+                string mainChoice = GetString("> Pick one: ").ToLower();
 
                 if (mainChoice == "1")
                 {
-                    ViewInv();
+                    DisplayInv();
                     Console.ReadLine();
                 }
                 else if (mainChoice == "2")
                 {
                     PurchaseMenuCLI purchaseMenu = new PurchaseMenuCLI();
-                    purchaseMenu.Run();
+                    purchaseMenu.Run(vm);
                 }
-                else if (mainChoice == "Q")
+                else if (mainChoice == "q")
                 {
                     break;
                 }
@@ -40,6 +41,24 @@ namespace Capstone
                     Console.ReadLine();
                 }
             }
+        }
+
+        public void DisplayInv()
+        {
+            Console.Clear();
+            using (StreamReader sr = new StreamReader("vendingmachine.csv"))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string[] line = sr.ReadLine().Split("|");
+                    string code = line[0];
+                    string name = line[1];
+                    decimal price = decimal.Parse(line[2]);
+                    string type = line[3];
+                    Console.WriteLine($"{code, - 3} {name, - 20} {price, -5} {type}");
+                }
+            }
+            Console.ReadLine();
         }
     }
 }

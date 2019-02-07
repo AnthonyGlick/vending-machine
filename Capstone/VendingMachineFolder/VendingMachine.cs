@@ -15,6 +15,10 @@ namespace Capstone.VendingMachineFolder
             this.CurrentBal = 0.00M;
         }
 
+        public void AddBal(decimal amount)
+        {
+          this.CurrentBal += amount;
+        }
 
 
 
