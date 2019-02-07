@@ -13,16 +13,17 @@ namespace Capstone.VendingMachineFolder
         public int RemainingInventory { get; private set; }
         public string Message { get; private set; }
 
-        public VendingMachineItem(string slot, string name, decimal price, string type, int remainingInventory)
+        public VendingMachineItem(string slot, string name, decimal price, string type)
         {
             this.Slot = slot;
             this.Name = name;
             this.Price = price;
             this.Type = type;
-            this.RemainingInventory = remainingInventory;
+            this.RemainingInventory = 5;
         }
 
-
+        protected abstract string MakeFoodSound();
+        
         
 
 

@@ -56,7 +56,9 @@ namespace Capstone.CLIs
 
         public void SelectProduct()
         {
-
+            Console.Clear();
+            string code = GetString("Please enter product code: ");
+            
         }
         public void FinishTransaction()
         {

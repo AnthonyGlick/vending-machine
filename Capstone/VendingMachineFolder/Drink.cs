@@ -4,7 +4,16 @@ using System.Text;
 
 namespace Capstone.VendingMachineFolder
 {
-    class Drink
+    public class Drink : VendingMachineItem
     {
+        public Drink(string slot, string name, decimal price, string type) : base(slot, name, price, type)
+        {
+
+        }
+
+        protected override string MakeFoodSound()
+        {
+            return "Glug Glug, Yum!";
+        }
     }
 }
