@@ -12,8 +12,12 @@ namespace Capstone.CLIs
 
         public override void Run(VendingMachine vm)
         {
+            string error = string.Empty;
             while (true)
             {
+                Console.Clear();
+                Console.Write("Errors: ");
+                Console.WriteLine(error);
                 Console.WriteLine("1) Feed Money");
                 Console.WriteLine("2) Select Product");
                 Console.WriteLine("3) Finish Transaction");
@@ -28,21 +32,36 @@ namespace Capstone.CLIs
 
                     this.FeedMoney(vm);
 
+                    error = string.Empty;
+
                     this.WriteAudit(vm, "FEED MONEY", oldBal);
                 }
                 else if (purchaseChoice == "2")
                 {
-                    decimal oldBal = vm.CurrentBal;
+                    if (vm.CurrentBal >= 0.75M)
+                    {
+                        decimal oldBal = vm.CurrentBal;
 
-                    VendingMachineItem purchasedItem = this.SelectProduct(vm);
-                    this.purchased.Add(purchasedItem);
-                    this.WriteAudit(vm, $"{purchasedItem.Name} {purchasedItem.Slot}", oldBal);
+                        VendingMachineItem purchasedItem = this.SelectProduct(vm);
+
+                        this.purchased.Add(purchasedItem);
+
+                        error = string.Empty;
+
+                        this.WriteAudit(vm, $"{purchasedItem.Name} {purchasedItem.Slot}", oldBal);
+                    }
+                    else
+                    {
+                        error = "Please insert atleast 1 dollar to continue.";
+                    }
                 }
                 else if (purchaseChoice == "3")
                 {
                     decimal oldBal = vm.CurrentBal;
 
                     this.FinishTransaction(vm);
+
+                    error = string.Empty;
 
                     this.WriteAudit(vm, "GIVE CHANGE", oldBal);
 
@@ -52,7 +71,9 @@ namespace Capstone.CLIs
                     }
 
                     this.purchased.RemoveRange(0, this.purchased.Count - 1);
+
                     Console.ReadLine();
+
                     return;
                 }
                 else if (purchaseChoice == "b")
@@ -61,9 +82,10 @@ namespace Capstone.CLIs
                 }
                 else
                 {
-                    Console.WriteLine("Invalid option.");
-                    Console.WriteLine();
+                    error = "Invalid option.";
                 }
+
+                Console.Clear();
             }
         }
 
@@ -71,7 +93,7 @@ namespace Capstone.CLIs
         {
             Console.Clear();
             Console.WriteLine("How much money do you wish to put in?");
-            Console.WriteLine("(Accepts $1, $2, $5, $10");
+            Console.WriteLine("(Accepts $1, $2, $5, $10)");
 
             while (true)
             {
@@ -96,10 +118,11 @@ namespace Capstone.CLIs
             VendingMachineItem purchasedItem = null;
             while (tryAgain == true)
             {
+                Console.Clear();
                 string code = this.GetString("Please enter product code: ").ToUpper();
                 try
                 {
-                    purchasedItem = vm.CalcBal(code);
+                    purchasedItem = vm.CalcBal(code, vm);
                     tryAgain = false;
                 }
                 catch (Exception ex)

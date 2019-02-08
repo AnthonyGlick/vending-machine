@@ -54,13 +54,17 @@ namespace Capstone.VendingMachineFolder
           this.CurrentBal += amount;
         }
 
-        public VendingMachineItem CalcBal(string code)
+        public VendingMachineItem CalcBal(string code, VendingMachine vm)
         {
             while (true)
             {
                 if (!this.inv.ContainsKey(code))
                 {
                     throw new Exception("Invalid code, please try again.");
+                }
+                else if (vm.CurrentBal < this.inv[code].Price)
+                {
+                    throw new Exception("Not enough money to purchase.");
                 }
                 else if (this.inv[code].RemainingInventory == 0)
                 {

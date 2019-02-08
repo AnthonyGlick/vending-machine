@@ -14,6 +14,7 @@ namespace Capstone.CLIs
             string error = string.Empty;
             while (true)
             {
+                Console.Write("Errors: ");
                 Console.WriteLine(error);
                 Console.WriteLine("Welcome To The Vendo-Matic 500! ");
                 Console.WriteLine("Please select an option: ");
