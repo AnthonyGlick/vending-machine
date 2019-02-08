@@ -9,7 +9,7 @@ namespace Capstone.VendingMachineFolder
     {
         private Dictionary<string, VendingMachineItem> inv = new Dictionary<string, VendingMachineItem>();
         public decimal TotalSales { get; private set;}
-        public decimal CurrentBal { get; private set; }
+        public decimal CurrentBal { get; set; } //TODO change to private set
         
         public VendingMachine()
         {
@@ -88,15 +88,15 @@ namespace Capstone.VendingMachineFolder
 
 
 
-            Console.WriteLine($"You have been given back {this.CurrentBal}");
+            Console.WriteLine($"You have been given back ${this.CurrentBal}");
             int quarterAmt = (int)(this.CurrentBal / quarter);
             this.CurrentBal -= quarterAmt * quarter;
             int dimeAmt = (int)(this.CurrentBal / dime);
             this.CurrentBal -= dimeAmt * dime;
-            int nickelAmt = (int)(this.CurrentBal * nickel);
+            int nickelAmt = (int)(this.CurrentBal / nickel);
             this.CurrentBal -= nickelAmt * nickel;
             Console.WriteLine($"That is {quarterAmt} quarters, {dimeAmt} dimes and {nickelAmt} nickels.");
-            Console.ReadLine();
+            Console.ReadLine(); //comment out if running unit test - ChangeReturnTests
         }
 
         

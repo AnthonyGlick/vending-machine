@@ -14,12 +14,12 @@ namespace Capstone.CLIs
         {
             while (true)
             {
-                
+                Console.WriteLine("Welcome To The Vendo-Matic 500! ");
                 Console.WriteLine("Please select an option: ");
                 Console.WriteLine("1) Display Inventory");
                 Console.WriteLine("2) Purchase");
                 Console.WriteLine("Q) Quit");
-                string mainChoice = GetString("> Pick one: ").ToLower();
+                string mainChoice = GetString("> Selection: ").ToLower();
 
                 if (mainChoice == "1")
                 {

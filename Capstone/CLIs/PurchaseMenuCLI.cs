@@ -20,7 +20,7 @@ namespace Capstone.CLIs
                 Console.WriteLine("B) Back");
                 Console.WriteLine();
                 Console.WriteLine($"Current money provided: ${vm.CurrentBal}"); 
-                string purchaseChoice = GetString("> Pick one: ").ToLower();
+                string purchaseChoice = GetString("> Selection: ").ToLower();
 
                 if (purchaseChoice == "1")
                 {
@@ -75,8 +75,20 @@ namespace Capstone.CLIs
             Console.Clear();
             Console.WriteLine("How much money do you wish to put in?");
             Console.WriteLine("(Accepts $1, $2, $5, $10");
-            decimal amount = decimal.Parse(GetString("> Type amount here: "));
-            vm.AddBal(amount);
+
+            while (true)
+            {
+                decimal amount = decimal.Parse(GetString("> Type amount here: "));
+                if (amount == 1.00M || amount == 2.00M || amount == 5.00M || amount == 10.0M)
+                {
+                    vm.AddBal(amount);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a valid dollar amount");
+                }
+            } 
             return;
         }
 
