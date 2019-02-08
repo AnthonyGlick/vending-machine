@@ -57,24 +57,31 @@ namespace Capstone.CLIs
                 }
                 else if (purchaseChoice == "3")
                 {
-                    decimal oldBal = vm.CurrentBal;
-
-                    this.FinishTransaction(vm);
-
-                    error = string.Empty;
-
-                    this.WriteAudit(vm, "GIVE CHANGE", oldBal);
-
-                    foreach (VendingMachineItem purchase in this.purchased)
+                    if (this.purchased.Count > 0)
                     {
-                        Console.WriteLine(purchase.MakeFoodSound());
+                        decimal oldBal = vm.CurrentBal;
+
+                        this.FinishTransaction(vm);
+
+                        error = string.Empty;
+
+                        this.WriteAudit(vm, "GIVE CHANGE", oldBal);
+
+                        foreach (VendingMachineItem purchase in this.purchased)
+                        {
+                            Console.WriteLine(purchase.MakeFoodSound());
+                        }
+
+                        this.purchased.RemoveRange(0, this.purchased.Count - 1);
+
+                        Console.ReadLine();
+
+                        return;
                     }
-
-                    this.purchased.RemoveRange(0, this.purchased.Count - 1);
-
-                    Console.ReadLine();
-
-                    return;
+                    else
+                    {
+                        error = "You havent purchased anything silly!";
+                    }
                 }
                 else if (purchaseChoice == "b")
                 {
