@@ -10,11 +10,11 @@ namespace Capstone.CLIs
         /// <summary>
         /// This continually prompts the user until they enter a valid integer.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">The int being got.</param>
+        /// <returns>An int</returns>
         protected int GetInteger(string message)
         {
-            string userInput = String.Empty;
+            string userInput = string.Empty;
             int intValue = 0;
             int numberOfAttempts = 0;
 
@@ -32,17 +32,16 @@ namespace Capstone.CLIs
             while (!int.TryParse(userInput, out intValue));
 
             return intValue;
-
         }
 
         /// <summary>
         /// This continually prompts the user until they enter a valid double.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">The double being got.</param>
+        /// <returns>A double</returns>
         protected double GetDouble(string message)
         {
-            string userInput = String.Empty;
+            string userInput = string.Empty;
             double doubleValue = 0.0;
             int numberOfAttempts = 0;
 
@@ -60,17 +59,16 @@ namespace Capstone.CLIs
             while (!double.TryParse(userInput, out doubleValue));
 
             return doubleValue;
-
         }
 
         /// <summary>
         /// This continually prompts the user until they enter a valid bool.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">The bool being got.</param>
+        /// <returns>A bool</returns>
         protected bool GetBool(string message)
         {
-            string userInput = String.Empty;
+            string userInput = string.Empty;
             bool boolValue = false;
             int numberOfAttempts = 0;
 
@@ -93,11 +91,11 @@ namespace Capstone.CLIs
         /// <summary>
         /// This continually prompts the user until they enter a valid string (1 or more characters).
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">The string being got.</param>
+        /// <returns>A string</returns>
         protected string GetString(string message)
         {
-            string userInput = String.Empty;
+            string userInput = string.Empty;
             int numberOfAttempts = 0;
 
             do
@@ -111,7 +109,7 @@ namespace Capstone.CLIs
                 userInput = Console.ReadLine();
                 numberOfAttempts++;
             }
-            while (String.IsNullOrEmpty(userInput));
+            while (string.IsNullOrEmpty(userInput));
 
             return userInput;
         }
@@ -119,6 +117,7 @@ namespace Capstone.CLIs
         /// <summary>
         /// This is the method called to run a menu.
         /// </summary>
+        /// <param name="vm">The vending machine</param>
         public abstract void Run(VendingMachine vm);
     }
 }
