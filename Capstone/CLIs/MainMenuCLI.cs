@@ -1,10 +1,9 @@
-﻿using Capstone.CLIs;
-using System;
+﻿using System;
+using System.IO;
+using Capstone.CLIs;
 using System.Collections.Generic;
 using System.Text;
 using Capstone.VendingMachineFolder;
-using System.IO;
-
 
 namespace Capstone.CLIs
 {
@@ -19,11 +18,11 @@ namespace Capstone.CLIs
                 Console.WriteLine("1) Display Inventory");
                 Console.WriteLine("2) Purchase");
                 Console.WriteLine("Q) Quit");
-                string mainChoice = GetString("> Selection: ").ToLower();
+                string mainChoice = this.GetString("> Selection: ").ToLower();
 
                 if (mainChoice == "1")
                 {
-                    DisplayInv();
+                    this.DisplayInv();
                     Console.ReadLine();
                 }
                 else if (mainChoice == "2")
@@ -37,10 +36,10 @@ namespace Capstone.CLIs
                 }
                 else
                 {
-                    
                     Console.WriteLine("Invalid option.");
-                    Console.WriteLine("");
+                    Console.WriteLine(string.Empty);
                 }
+
                 Console.Clear();
             }
         }
@@ -57,9 +56,10 @@ namespace Capstone.CLIs
                     string name = line[1];
                     decimal price = decimal.Parse(line[2]);
                     string type = line[3];
-                    Console.WriteLine($"{code, - 3} {name, - 20} {price, -5} {type}");
+                    Console.WriteLine($"{code, -3} {name, -20} {price, -5} {type}");
                 }
             }
+
             Console.ReadLine();
         }
     }

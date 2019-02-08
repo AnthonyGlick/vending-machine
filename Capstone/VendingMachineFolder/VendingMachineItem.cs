@@ -27,13 +27,5 @@ namespace Capstone.VendingMachineFolder
         {
             inv[code].RemainingInventory--;
         }
-        
-        
-
-
-    
-     
-
-   
     }
 }

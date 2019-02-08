@@ -120,6 +120,5 @@ namespace Capstone.CLIs
         /// This is the method called to run a menu.
         /// </summary>
         public abstract void Run(VendingMachine vm);
-
     }
 }

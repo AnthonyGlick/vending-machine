@@ -8,9 +8,11 @@ namespace Capstone.VendingMachineFolder
     public class VendingMachine
     {
         private Dictionary<string, VendingMachineItem> inv = new Dictionary<string, VendingMachineItem>();
-        public decimal TotalSales { get; private set;}
-        public decimal CurrentBal { get; set; } //TODO change to private set
-        
+
+        public decimal TotalSales { get; private set; }
+
+        public decimal CurrentBal { get; private set; }
+
         public VendingMachine()
         {
             this.TotalSales = 0.00M;
@@ -29,24 +31,22 @@ namespace Capstone.VendingMachineFolder
 
                     if (type == "Chip")
                     {
-                        inv.Add(slot, new Chip(slot, name, price, type));
+                        this.inv.Add(slot, new Chip(slot, name, price, type));
                     }
                     else if (type == "Candy")
                     {
-                        inv.Add(slot, new Candy(slot, name, price, type));
+                        this.inv.Add(slot, new Candy(slot, name, price, type));
                     }
                     else if (type == "Drink")
                     {
-                        inv.Add(slot, new Drink(slot, name, price, type));
+                        this.inv.Add(slot, new Drink(slot, name, price, type));
                     }
                     else
                     {
-                        inv.Add(slot, new Gum(slot, name, price, type));
+                        this.inv.Add(slot, new Gum(slot, name, price, type));
                     }
-
                 }
             }
-
         }
 
         public void AddBal(decimal amount)
@@ -58,23 +58,19 @@ namespace Capstone.VendingMachineFolder
         {
             while (true)
             {
-                if (!inv.ContainsKey(code))
+                if (!this.inv.ContainsKey(code))
                 {
                     throw new Exception("Invalid code, please try again.");
-                    
-                    
                 }
-
-                else if (inv[code].RemainingInventory == 0)
+                else if (this.inv[code].RemainingInventory == 0)
                 {
                     throw new Exception("OUT OF STOCK");
-                    
                 }
                 else
                 {
-                    this.CurrentBal -= inv[code].Price;
-                    inv[code].DecrementItem(code, inv);
-                    return inv[code];
+                    this.CurrentBal -= this.inv[code].Price;
+                    this.inv[code].DecrementItem(code, this.inv);
+                    return this.inv[code];
                 }
             }
         }
@@ -85,9 +81,6 @@ namespace Capstone.VendingMachineFolder
             const decimal dime = 0.10M;
             const decimal nickel = 0.05M;
 
-
-
-
             Console.WriteLine($"You have been given back ${this.CurrentBal}");
             int quarterAmt = (int)(this.CurrentBal / quarter);
             this.CurrentBal -= quarterAmt * quarter;
@@ -96,14 +89,7 @@ namespace Capstone.VendingMachineFolder
             int nickelAmt = (int)(this.CurrentBal / nickel);
             this.CurrentBal -= nickelAmt * nickel;
             Console.WriteLine($"That is {quarterAmt} quarters, {dimeAmt} dimes and {nickelAmt} nickels.");
-            Console.ReadLine(); //comment out if running unit test - ChangeReturnTests
+            Console.ReadLine(); // comment out if running unit test - ChangeReturnTests
         }
-
-        
-        
-
-
-
-
     }
 }
