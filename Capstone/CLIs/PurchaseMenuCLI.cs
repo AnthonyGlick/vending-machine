@@ -51,9 +51,11 @@ namespace Capstone.CLIs
 
                     foreach(VendingMachineItem purchase in purchased)
                     {
-                        purchase.MakeFoodSound();
-                        purchased.Remove(purchase);
+                        Console.WriteLine(purchase.MakeFoodSound());
+                        
                     }
+                    purchased.RemoveRange(0, purchased.Count - 1);
+                    Console.ReadLine();
                     return;
                 }
                 else if (purchaseChoice == "b")
