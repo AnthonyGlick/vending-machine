@@ -8,7 +8,6 @@ namespace Capstone.VendingMachineFolder
     {
         public Drink(string slot, string name, decimal price, string type) : base(slot, name, price, type)
         {
-
         }
 
         public override string MakeFoodSound()

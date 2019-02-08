@@ -2,20 +2,15 @@
 using Capstone.CLIs;
 using Capstone.VendingMachineFolder;
 
-
 namespace Capstone
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             VendingMachine vm = new VendingMachine();
             MainMenuCLI menu = new MainMenuCLI();
             menu.Run(vm);
-            
-
-
-
         }
     }
 }
