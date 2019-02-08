@@ -11,7 +11,7 @@ namespace Capstone.VendingMachineFolder
 
         }
 
-        protected override string MakeFoodSound()
+        public override string MakeFoodSound()
         {
             return "Chew Chew, Yum!";
         }

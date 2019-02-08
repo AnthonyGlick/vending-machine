@@ -7,7 +7,7 @@ namespace Capstone.VendingMachineFolder
 {
     public class VendingMachine
     {
-        private List<VendingMachineItem> inv = new List<VendingMachineItem>();
+        private Dictionary<string, VendingMachineItem> inv = new Dictionary<string, VendingMachineItem>();
         public decimal TotalSales { get; private set;}
         public decimal CurrentBal { get; private set; }
         
@@ -20,10 +20,29 @@ namespace Capstone.VendingMachineFolder
             {
                 while (!sr.EndOfStream)
                 {
-
-
                     string[] itemInfo = sr.ReadLine().Split("|");
-                    inv.Add(new itemInfo[3](itemInfo[0], itemInfo[1], itemInfo[2], itemInfo[3]))
+
+                    string slot = itemInfo[0];
+                    string name = itemInfo[1];
+                    decimal price = decimal.Parse(itemInfo[2]);
+                    string type = itemInfo[3];
+
+                    if (type == "Chip")
+                    {
+                        inv.Add(slot, new Chip(slot, name, price, type));
+                    }
+                    else if (type == "Candy")
+                    {
+                        inv.Add(slot, new Candy(slot, name, price, type));
+                    }
+                    else if (type == "Drink")
+                    {
+                        inv.Add(slot, new Drink(slot, name, price, type));
+                    }
+                    else
+                    {
+                        inv.Add(slot, new Gum(slot, name, price, type));
+                    }
 
                 }
             }
@@ -34,6 +53,55 @@ namespace Capstone.VendingMachineFolder
         {
           this.CurrentBal += amount;
         }
+
+        public VendingMachineItem CalcBal(string code)
+        {
+            while (true)
+            {
+                if (!inv.ContainsKey(code))
+                {
+                    throw new Exception("Invalid code, please try again.");
+                    
+                    
+                }
+
+                else if (inv[code].RemainingInventory == 0)
+                {
+                    throw new Exception("OUT OF STOCK");
+                    
+                }
+                else
+                {
+                    this.CurrentBal -= inv[code].Price;
+                    inv[code].DecrementItem(code, inv);
+                    return inv[code];
+                }
+            }
+        }
+
+        public void ChangeBack()
+        {
+            const decimal quarter = 0.25M;
+            const decimal dime = 0.10M;
+            const decimal nickel = 0.05M;
+
+
+
+
+            Console.WriteLine($"You have been given back {this.CurrentBal}");
+            int quarterAmt = (int)(this.CurrentBal / quarter);
+            this.CurrentBal -= quarterAmt * quarter;
+            int dimeAmt = (int)(this.CurrentBal / dime);
+            this.CurrentBal -= dimeAmt * dime;
+            int nickelAmt = (int)(this.CurrentBal * nickel);
+            this.CurrentBal -= nickelAmt * nickel;
+            Console.WriteLine($"That is {quarterAmt} quarters, {dimeAmt} dimes and {nickelAmt} nickels.");
+            Console.ReadLine();
+        }
+
+        
+        
+
 
 
 

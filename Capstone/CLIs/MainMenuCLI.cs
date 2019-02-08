@@ -14,7 +14,7 @@ namespace Capstone.CLIs
         {
             while (true)
             {
-                Console.Clear();
+                
                 Console.WriteLine("Please select an option: ");
                 Console.WriteLine("1) Display Inventory");
                 Console.WriteLine("2) Purchase");
@@ -37,9 +37,11 @@ namespace Capstone.CLIs
                 }
                 else
                 {
+                    
                     Console.WriteLine("Invalid option.");
-                    Console.ReadLine();
+                    Console.WriteLine("");
                 }
+                Console.Clear();
             }
         }
 

@@ -11,7 +11,6 @@ namespace Capstone.VendingMachineFolder
         public decimal Price { get; }
         public string Type { get; }
         public int RemainingInventory { get; private set; }
-        public string Message { get; private set; }
 
         public VendingMachineItem(string slot, string name, decimal price, string type)
         {
@@ -22,7 +21,12 @@ namespace Capstone.VendingMachineFolder
             this.RemainingInventory = 5;
         }
 
-        protected abstract string MakeFoodSound();
+        public abstract string MakeFoodSound();
+
+        public void DecrementItem(string code, Dictionary<string, VendingMachineItem> inv)
+        {
+            inv[code].RemainingInventory--;
+        }
         
         
 

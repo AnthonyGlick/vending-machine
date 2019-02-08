@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Capstone.VendingMachineFolder;
 
@@ -7,11 +8,12 @@ namespace Capstone.CLIs
 {
     class PurchaseMenuCLI : CLI
     {
+        List<VendingMachineItem> purchased = new List<VendingMachineItem>();
+
         public override void Run(VendingMachine vm)
         {
             while (true)
-            {
-                Console.Clear();
+            {              
                 Console.WriteLine("1) Feed Money");
                 Console.WriteLine("2) Select Product");
                 Console.WriteLine("3) Finish Transaction");
@@ -22,15 +24,37 @@ namespace Capstone.CLIs
 
                 if (purchaseChoice == "1")
                 {
+                    decimal oldBal = vm.CurrentBal;
+
                     FeedMoney(vm);
+
+                    WriteAudit(vm, "FEED MONEY", oldBal);
                 }
                 else if (purchaseChoice == "2")
                 {
-                    SelectProduct();
+                    decimal oldBal = vm.CurrentBal;
+
+                    VendingMachineItem purchasedItem = SelectProduct(vm); 
+                    purchased.Add(purchasedItem);
+
+
+
+                    WriteAudit(vm, $"{purchasedItem.Name} {purchasedItem.Slot}", oldBal);
                 }
                 else if (purchaseChoice == "3")
                 {
-                    FinishTransaction();
+                    decimal oldBal = vm.CurrentBal;
+
+                    FinishTransaction(vm);
+
+                    WriteAudit(vm, "GIVE CHANGE", oldBal);
+
+                    foreach(VendingMachineItem purchase in purchased)
+                    {
+                        purchase.MakeFoodSound();
+                        purchased.Remove(purchase);
+                    }
+                    return;
                 }
                 else if (purchaseChoice == "b")
                 {
@@ -39,7 +63,7 @@ namespace Capstone.CLIs
                 else
                 {
                     Console.WriteLine("Invalid option.");
-                    Console.ReadLine();
+                    Console.WriteLine();
                 }
             }
         }
@@ -54,15 +78,46 @@ namespace Capstone.CLIs
             return;
         }
 
-        public void SelectProduct()
+        public VendingMachineItem SelectProduct(VendingMachine vm)
         {
-            Console.Clear();
-            string code = GetString("Please enter product code: ");
-            
+            bool tryAgain = true;
+            VendingMachineItem purchasedItem = null;
+            while (tryAgain == true)
+            {
+                string code = GetString("Please enter product code: ").ToUpper();
+                try
+                {
+                    purchasedItem = vm.CalcBal(code);
+                    tryAgain = false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return purchasedItem;
         }
-        public void FinishTransaction()
+
+        public void WriteAudit(VendingMachine vm, string action, decimal previousBal)
+        {
+            using(StreamWriter sw = new StreamWriter("audit.txt"))
+            {
+                foreach(VendingMachineItem purchase in purchased)
+                {
+                    sw.WriteLine($"{DateTime.Now,-15} {action,-20} {previousBal,-5} {vm.CurrentBal}");
+                }
+            }
+        }
+
+        public void WriteSales()
         {
 
+        }
+
+        public void FinishTransaction(VendingMachine vm)
+        {
+            vm.ChangeBack();
+            return;
         }
     }
 }
