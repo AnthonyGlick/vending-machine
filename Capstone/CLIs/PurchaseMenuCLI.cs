@@ -31,18 +31,17 @@ namespace Capstone.CLIs
                     decimal oldBal = vm.CurrentBal;
 
                     this.FeedMoney(vm);
+                    this.WriteAudit(vm, "FEED MONEY", oldBal);
 
                     error = string.Empty;
-
-                    this.WriteAudit(vm, "FEED MONEY", oldBal);
                 }
                 else if (purchaseChoice == "2")
                 {
-                    if (vm.CurrentBal >= 0.75M)
+                    VendingMachineItem purchasedItem = this.SelectProduct(vm);
+                    if (purchasedItem != null)
                     {
                         decimal oldBal = vm.CurrentBal;
 
-                        VendingMachineItem purchasedItem = this.SelectProduct(vm);
 
                         this.purchased.Add(purchasedItem);
 
@@ -52,7 +51,7 @@ namespace Capstone.CLIs
                     }
                     else
                     {
-                        error = "Please insert atleast 1 dollar to continue.";
+                        error = "Please try again.";
                     }
                 }
                 else if (purchaseChoice == "3")
@@ -71,6 +70,8 @@ namespace Capstone.CLIs
                         {
                             Console.WriteLine(purchase.MakeFoodSound());
                         }
+
+                        this.WriteSales(vm);
 
                         this.purchased.RemoveRange(0, this.purchased.Count - 1);
 
@@ -129,31 +130,58 @@ namespace Capstone.CLIs
                 string code = this.GetString("Please enter product code: ").ToUpper();
                 try
                 {
-                    purchasedItem = vm.CalcBal(code, vm);
+                    purchasedItem = vm.CalcBal(code);
                     tryAgain = false;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Console.ReadLine();
+                    return null;
                 }
             }
 
             return purchasedItem;
         }
 
+        // TODO Doesnt record Keep Money
         public void WriteAudit(VendingMachine vm, string action, decimal previousBal)
         {
-            using (StreamWriter sw = new StreamWriter("audit.txt"))
+            using (StreamWriter sw = new StreamWriter("audit.txt", true))
             {
-                foreach (VendingMachineItem purchase in this.purchased)
-                {
                     sw.WriteLine($"{DateTime.Now, -15} {action, -20} {previousBal, -5} {vm.CurrentBal}");
-                }
             }
         }
 
-        public void WriteSales()
+        // TODO Outputs blank file for some reason
+        public void WriteSales(VendingMachine vm)
         {
+            string[] line = new string[2];
+
+            using (StreamReader sr = new StreamReader("sales.txt"))
+            {
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine().Split("|");
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter("sales1.txt"))
+            {
+                for (int i = 0; i < this.purchased.Count - 1; i++)
+                {
+                    if (line[0] == this.purchased[i].Name)
+                    {
+                        int quantity = int.Parse(line[1]);
+                        quantity++;
+                        sw.WriteLine($"{line[0]}|{quantity}");
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
         }
 
         public void FinishTransaction(VendingMachine vm)
