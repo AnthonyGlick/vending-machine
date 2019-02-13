@@ -25,7 +25,7 @@ namespace CapstoneTests
             decimal decExpected = decimal.Parse(expectedBalance);
             VendingMachine machine = new VendingMachine();
 
-            machine.CurrentBal = decBalance;
+            //machine.CurrentBal = decBalance; //TODO Fix Later
             machine.ChangeBack(); // comment out the readline at the end of ChangeBack if running this unit test
 
             Assert.AreEqual(decExpected, machine.CurrentBal);
@@ -47,8 +47,8 @@ namespace CapstoneTests
             decimal decExpected = decimal.Parse(expectedOutput);
 
             VendingMachine machine = new VendingMachine();
-            machine.CurrentBal = decBalance;
-            machine.CalcBal(code);
+            //machine.CurrentBal = decBalance; //TODO Fix later
+            machine.PurchaseItem(code);
 
             Assert.AreEqual(decExpected, machine.CurrentBal);
         }

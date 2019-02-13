@@ -8,11 +8,19 @@ namespace Capstone.CLIs
 {
     public class PurchaseMenuCLI : CLI
     {
+        private VendingMachine vm;
+        public PurchaseMenuCLI(VendingMachine vm)
+        {
+            this.vm = vm;
+        }
+
         private List<VendingMachineItem> purchased = new List<VendingMachineItem>();
 
-        public override void Run(VendingMachine vm)
+        public override void Run()
         {
             string error = string.Empty;
+            AuditWriter auditWriter = new AuditWriter();
+
             while (true)
             {
                 Console.Clear();
@@ -30,14 +38,14 @@ namespace Capstone.CLIs
                 {
                     decimal oldBal = vm.CurrentBal;
 
-                    this.FeedMoney(vm);
-                    this.WriteAudit(vm, "FEED MONEY", oldBal);
+                    this.DisplayFeedMoney(vm);
+                    auditWriter.WriteAudit(vm.CurrentBal, "FEED MONEY", oldBal);
 
                     error = string.Empty;
                 }
                 else if (purchaseChoice == "2")
                 {
-                    VendingMachineItem purchasedItem = this.SelectProduct(vm);
+                    VendingMachineItem purchasedItem = this.DisplaySelectProduct(vm);
                     if (purchasedItem != null)
                     {
                         decimal oldBal = vm.CurrentBal;
@@ -47,7 +55,7 @@ namespace Capstone.CLIs
 
                         error = string.Empty;
 
-                        this.WriteAudit(vm, $"{purchasedItem.Name} {purchasedItem.Slot}", oldBal);
+                        auditWriter.WriteAudit(vm.CurrentBal, $"{purchasedItem.Name} {purchasedItem.Slot}", oldBal);
                     }
                     else
                     {
@@ -64,7 +72,8 @@ namespace Capstone.CLIs
 
                         error = string.Empty;
 
-                        this.WriteAudit(vm, "GIVE CHANGE", oldBal);
+                        auditWriter.WriteAudit(vm.CurrentBal, "GIVE CHANGE", oldBal);
+                        
 
                         foreach (VendingMachineItem purchase in this.purchased)
                         {
@@ -97,7 +106,11 @@ namespace Capstone.CLIs
             }
         }
 
-        public void FeedMoney(VendingMachine vm)
+        /// <summary>
+        /// Displays the feed money prompt and adds the balance to the machine.
+        /// </summary>
+        /// <param name="vm"></param>
+        public void DisplayFeedMoney(VendingMachine vm)
         {
             Console.Clear();
             Console.WriteLine("How much money do you wish to put in?");
@@ -120,7 +133,12 @@ namespace Capstone.CLIs
             return;
         }
 
-        public VendingMachineItem SelectProduct(VendingMachine vm)
+        /// <summary>
+        /// Prompts the user to select a product and purchases it.
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
+        public VendingMachineItem DisplaySelectProduct(VendingMachine vm)
         {
             bool tryAgain = true;
             VendingMachineItem purchasedItem = null;
@@ -130,7 +148,7 @@ namespace Capstone.CLIs
                 string code = this.GetString("Please enter product code: ").ToUpper();
                 try
                 {
-                    purchasedItem = vm.CalcBal(code);
+                    purchasedItem = vm.PurchaseItem(code);
                     tryAgain = false;
                 }
                 catch (Exception ex)
@@ -144,14 +162,7 @@ namespace Capstone.CLIs
             return purchasedItem;
         }
 
-        // TODO Doesnt record Keep Money
-        public void WriteAudit(VendingMachine vm, string action, decimal previousBal)
-        {
-            using (StreamWriter sw = new StreamWriter("audit.txt", true))
-            {
-                    sw.WriteLine($"{DateTime.Now, -15} {action, -20} {previousBal, -5} {vm.CurrentBal}");
-            }
-        }
+        
 
         // TODO Outputs blank file for some reason
         public void WriteSales(VendingMachine vm)

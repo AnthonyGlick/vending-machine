@@ -27,9 +27,9 @@ namespace Capstone.VendingMachineFolder
 
         public abstract string MakeFoodSound();
 
-        public void DecrementItem(string code, Dictionary<string, VendingMachineItem> inv)
+        public void DecrementItem()
         {
-            inv[code].RemainingInventory--;
+            RemainingInventory--;
         }
     }
 }

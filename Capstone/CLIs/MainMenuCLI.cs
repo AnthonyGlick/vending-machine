@@ -9,7 +9,13 @@ namespace Capstone.CLIs
 {
     public class MainMenuCLI : CLI
     {
-        public override void Run(VendingMachine vm)
+        private VendingMachine vm;
+        public MainMenuCLI(VendingMachine vm)
+        {
+            this.vm = vm;
+        }
+
+        public override void Run()
         {
             string error = string.Empty;
             while (true)
@@ -32,8 +38,8 @@ namespace Capstone.CLIs
                 }
                 else if (mainChoice == "2")
                 {
-                    PurchaseMenuCLI purchaseMenu = new PurchaseMenuCLI();
-                    purchaseMenu.Run(vm);
+                    PurchaseMenuCLI purchaseMenu = new PurchaseMenuCLI(vm);
+                    purchaseMenu.Run();
                     error = string.Empty;
                 }
                 else if (mainChoice == "q")
@@ -51,20 +57,16 @@ namespace Capstone.CLIs
 
         public void DisplayInv()
         {
+
             Console.Clear();
             Console.WriteLine("Inventory".PadLeft(23));
             Console.WriteLine();
-            using (StreamReader sr = new StreamReader("vendingmachine.csv"))
+
+            string[] slots = vm.Slots;
+            foreach (string slot in slots)
             {
-                while (!sr.EndOfStream)
-                {
-                    string[] line = sr.ReadLine().Split("|");
-                    string code = line[0];
-                    string name = line[1];
-                    decimal price = decimal.Parse(line[2]);
-                    string type = line[3];
-                    Console.WriteLine($"{code, -3} {name, -20} ${price, -5} {type}");
-                }
+                VendingMachineItem item = vm.GetItemAtSlot(slot);
+                Console.WriteLine($"{item.Slot,-3} {item.Name,-20} ${item.Price,-5} {item.Type}");
             }
         }
     }

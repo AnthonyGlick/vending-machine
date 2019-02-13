@@ -9,8 +9,8 @@ namespace Capstone
         public static void Main(string[] args)
         {
             VendingMachine vm = new VendingMachine();
-            MainMenuCLI menu = new MainMenuCLI();
-            menu.Run(vm);
+            MainMenuCLI menu = new MainMenuCLI(vm);
+            menu.Run();
         }
     }
 }
